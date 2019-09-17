@@ -11,11 +11,15 @@ import (
 
 	"github.com/PuerkitoBio/goquery"
 	"github.com/cheggaaa/pb"
+	"github.com/reujab/wallpaper"
+
+	"github.com/tschf/unphoto/config"
 	"github.com/tschf/unphoto/httpclient"
 )
 
-func GetPhoto() {
+func GetPhoto(applyWallpaper bool) {
 	fmt.Println("Download guardian pic")
+	fmt.Println(applyWallpaper)
 
 	imageIndexresp := httpclient.GetHttpResponse("https://www.theguardian.com/news/series/ten-best-photographs-of-the-day")
 	picOfDayDoc, err := goquery.NewDocumentFromResponse(imageIndexresp)
@@ -45,7 +49,17 @@ func GetPhoto() {
 	progressBar.Prefix(fmt.Sprintf("%s:", path.Base(imageURL.Path)))
 	progressBar.Start()
 	readerWithProgress := progressBar.NewProxyReader(todaysPhotoResp.Body)
-	savedFile, err := os.Create(path.Base(imageURL.Path))
+	var savedFile *os.File
+	var destWallpaperfile string
+	sourceFilename := path.Base(imageURL.Path)
+	if applyWallpaper {
+		dataDir := config.GetDataDir()
+		_ = os.MkdirAll(dataDir, os.ModePerm)
+		destWallpaperfile = path.Join(dataDir, "photo-of-the-day"+path.Ext(sourceFilename))
+		savedFile, err = os.Create(destWallpaperfile)
+	} else {
+		savedFile, err = os.Create(sourceFilename)
+	}
 	defer savedFile.Close()
 	if err != nil {
 		log.Fatal(err)
@@ -55,5 +69,11 @@ func GetPhoto() {
 		log.Fatal(err)
 	}
 	progressBar.Finish()
+
+	fileInfo, _ := savedFile.Stat()
+	// Double check the saved file has a positive length before applying the update
+	if applyWallpaper && fileInfo.Size() > 0 {
+		wallpaper.SetFromFile(destWallpaperfile)
+	}
 	fmt.Println("Done")
 }

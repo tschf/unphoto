@@ -1,9 +1,11 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"os"
 
+	"github.com/tschf/unphoto/config"
 	"github.com/tschf/unphoto/source/guardian"
 
 	"github.com/urfave/cli"
@@ -12,18 +14,28 @@ import (
 func main() {
 
 	app := cli.NewApp()
-	app.Name = "unphoto"
-	app.Usage = "Download the latest pic of the day"
+	app.Name = config.APP_NAME
+	app.Usage = "Download the latest photo of the day"
+	app.Version = config.APP_VERSION
 
 	app.Flags = []cli.Flag{
 		cli.BoolFlag{
 			Name:  "guardian",
-			Usage: "Download the pic of the day from The Guardian",
+			Usage: "Download the photo of the day from The Guardian",
+		},
+		cli.BoolFlag{
+			Name:  "wallpaper",
+			Usage: "Set the pic as the wallpaper",
 		},
 	}
 	app.Action = func(c *cli.Context) error {
+		fmt.Println(config.GetDataDir())
+		if 1 == 2 {
+			os.Exit(1)
+		}
+		applyWallpaper := c.Bool("wallpaper")
 		if c.Bool("guardian") {
-			guardian.GetPhoto()
+			guardian.GetPhoto(applyWallpaper)
 
 		}
 		return nil
