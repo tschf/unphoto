@@ -29,12 +29,11 @@ func main() {
 		},
 	}
 	app.Action = func(c *cli.Context) error {
-		fmt.Println(config.GetDataDir())
-		if 1 == 2 {
-			os.Exit(1)
-		}
+
 		applyWallpaper := c.Bool("wallpaper")
+
 		if c.Bool("guardian") {
+			fmt.Println("Photo source: Guardian")
 			guardian.GetPhoto(applyWallpaper)
 
 		}

@@ -18,8 +18,6 @@ import (
 )
 
 func GetPhoto(applyWallpaper bool) {
-	fmt.Println("Download guardian pic")
-	fmt.Println(applyWallpaper)
 
 	imageIndexresp := httpclient.GetHttpResponse("https://www.theguardian.com/news/series/ten-best-photographs-of-the-day")
 	picOfDayDoc, err := goquery.NewDocumentFromResponse(imageIndexresp)
@@ -75,5 +73,4 @@ func GetPhoto(applyWallpaper bool) {
 	if applyWallpaper && fileInfo.Size() > 0 {
 		wallpaper.SetFromFile(destWallpaperfile)
 	}
-	fmt.Println("Done")
 }
