@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"os"
 
@@ -10,6 +9,11 @@ import (
 
 	"github.com/urfave/cli"
 )
+
+type photoSource interface {
+	GetPhoto(applyWallpaper bool)
+	PrintSourceInfo()
+}
 
 func main() {
 
@@ -30,13 +34,16 @@ func main() {
 	}
 	app.Action = func(c *cli.Context) error {
 
-		applyWallpaper := c.Bool("wallpaper")
+		var ps photoSource
+		var applyWallpaper bool
 
 		if c.Bool("guardian") {
-			fmt.Println("Photo source: Guardian")
-			guardian.GetPhoto(applyWallpaper)
-
+			ps = guardian.GuardianSource{}
 		}
+
+		applyWallpaper = c.Bool("wallpaper")
+		ps.PrintSourceInfo()
+		ps.GetPhoto(applyWallpaper)
 		return nil
 	}
 
