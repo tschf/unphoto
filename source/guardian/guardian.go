@@ -24,13 +24,12 @@ const sourceName string = "guardian"
 func (s GuardianSource) GetPhoto(applyWallpaper bool) {
 
 	imageIndexresp := httpclient.GetHttpResponse("https://www.theguardian.com/news/series/ten-best-photographs-of-the-day")
-	picOfDayDoc, err := goquery.NewDocumentFromResponse(imageIndexresp)
+	picOfDayDoc, _ := goquery.NewDocumentFromReader(imageIndexresp.Body)
 
 	picDivs := picOfDayDoc.Find("div.fc-container__inner a.u-faux-block-link__overlay")
 	todaysPicPage, _ := picDivs.First().Attr("href")
 
-	todaysPicPageResp := httpclient.GetHttpResponse(todaysPicPage)
-	picOfDayDoc, err = goquery.NewDocumentFromResponse(todaysPicPageResp)
+	picOfDayDoc, _ = goquery.NewDocumentFromReader(todaysPicPageResp.Body)
 
 	sources := picOfDayDoc.Find("div.content picture source")
 	picSrcSet, _ := sources.First().Attr("srcset")
