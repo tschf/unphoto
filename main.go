@@ -33,7 +33,7 @@ func main() {
 			Usage: "Choose a photo from the specified localPath",
 		},
 		cli.StringFlag{
-			Name:  "localPath",
+			Name:  "local-path",
 			Usage: "Specify the path to choose a picture. One will be chosen at random",
 		},
 		cli.BoolFlag{
@@ -50,6 +50,7 @@ func main() {
 			ps = guardian.GuardianSource{}
 		} else if c.Bool("local") {
 			ps = local.LocalSource{}
+			ps.(local.LocalSource).SetPicturePath(c.String("local-path"))
 		}
 
 		applyWallpaper = c.Bool("wallpaper")
