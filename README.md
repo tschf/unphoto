@@ -1,12 +1,13 @@
 # unphoto
 
-Download the pic of the day from differing sources. This is inspired by another
-application I had that would download and set a new wallpaper each day.
-Currently it's only working with The Guardian daily photo's.
+Utility for setting a randomized photo to your wallpaper. Currently implemented proviers:
+
+* Guardian - Uses picture of the day
+* Local - You point to a folder on your system
 
 ## Usage
 
-A few example usage examples
+A few example usage patterns:
 
 ```
 unphoto --guardian
