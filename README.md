@@ -58,7 +58,7 @@ systemctl --user daemon-reload
 systemctl --user list-timers
 ```
 
-After creating the service file, reload the aemon
+Reference: OL documentation, <https://docs.oracle.com/en/learn/use_systemd/#work-with-systemd-timer-units>
 
 ## Author
 
