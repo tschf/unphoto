@@ -6,7 +6,7 @@ import (
 )
 
 const APP_NAME = "unphoto"
-const APP_VERSION = "0.0.1"
+const APP_VERSION = "0.0.2"
 
 // Get the data directory to store the photo of the day. This is so we can
 // the latest photo of the day before applying it as the wallpaper.

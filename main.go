@@ -6,6 +6,7 @@ import (
 
 	"github.com/tschf/unphoto/config"
 	"github.com/tschf/unphoto/source/guardian"
+	"github.com/tschf/unphoto/source/local"
 
 	"github.com/urfave/cli"
 )
@@ -28,6 +29,14 @@ func main() {
 			Usage: "Download the photo of the day from The Guardian",
 		},
 		cli.BoolFlag{
+			Name:  "local",
+			Usage: "Choose a photo from the specified localPath",
+		},
+		cli.StringFlag{
+			Name:  "local-path",
+			Usage: "Specify the path to choose a picture. One will be chosen at random",
+		},
+		cli.BoolFlag{
 			Name:  "wallpaper",
 			Usage: "Set the pic as the wallpaper",
 		},
@@ -39,6 +48,9 @@ func main() {
 
 		if c.Bool("guardian") {
 			ps = guardian.GuardianSource{}
+		} else if c.Bool("local") {
+			ps = local.LocalSource{}
+			ps.(local.LocalSource).SetPicturePath(c.String("local-path"))
 		}
 
 		applyWallpaper = c.Bool("wallpaper")
